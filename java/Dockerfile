@@ -10,6 +10,9 @@ COPY pom.xml .
 # Copy the source code into the image
 COPY src src
 
+# Clear Maven's local repository cache before building to avoid old dependency issues
+RUN rm -rf ~/.m2/repository/org/springframework
+
 # Package the application
 RUN mvn -B clean package -DskipTests -Dmaven.test.skip=true
 
