@@ -13,7 +13,7 @@ COPY src src
 # Package the application
 RUN mvn -B clean package -DskipTests -Dmaven.test.skip=true
 
-# Step 2: Use the official OpenJDK image to run the application
+# Use the official OpenJDK image to run the application
 FROM openjdk:11-jre-slim as runtime
 
 # Copy the built application JAR from the build stage to the runtime stage
@@ -22,5 +22,5 @@ COPY --from=build /application/target/*.jar app.jar
 # Expose the port the application runs on
 EXPOSE 9000
 
-# Command to run the application
+# Run the app
 ENTRYPOINT ["java", "-jar", "/app.jar"]
