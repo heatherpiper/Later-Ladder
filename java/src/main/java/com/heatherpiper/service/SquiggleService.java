@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 public class SquiggleService {
 
     private static final Logger logger = LoggerFactory.getLogger(SquiggleService.class);
+    private static final String USER_AGENT = "Later Ladder (github.com/heatherpiper/Later-Ladder; heather.a.piper@gmail.com)";
 
     private static final long MIN_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private long lastRefreshTime = 0;
@@ -97,7 +98,7 @@ public class SquiggleService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
+                .header("User-Agent", USER_AGENT)
                 .build();
 
         try {
@@ -133,7 +134,7 @@ public class SquiggleService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
+                .header("User-Agent", USER_AGENT)
                 .build();
 
         try {
@@ -172,7 +173,7 @@ public class SquiggleService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Accept", "application/json")
-                    .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
+                    .header("User-Agent", USER_AGENT)
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
@@ -219,7 +220,7 @@ public class SquiggleService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Accept", "application/json")
-                    .header("User-Agent", "Later Ladder (github.com/heatherpiper/Later-Ladder)")
+                    .header("User-Agent", USER_AGENT)
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
@@ -349,8 +350,9 @@ public class SquiggleService {
         logger.info("Attempting to connect to the Squiggle SSE endpoint...");
 
         Flux<String> eventStream = reactor.netty.http.client.HttpClient.create()
+                .headers(h -> h.set("User-Agent", USER_AGENT))
                 .get()
-                .uri("https://api.squiggle.com.au/sse/games")
+                .uri("https://sse.squiggle.com.au/games")
                 .responseContent()
                 .asString()
                 .windowUntil(s -> s.contains("\n\n"))
